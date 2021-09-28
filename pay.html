@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <title>在线支付</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./pay.css">
+    <link rel="shortcut icon" type="image/x-icon" href="./img/title.jpg"/>
+</head>
+
+<body>
+    <div id="app">
+        <div class="head">
+            <div class="minbox">
+                <img src="./img/logo.png" alt="" class="logo">
+                <div class="lan">
+                    <el-select v-model="value" placeholder="请选择">
+                        <el-option
+                          v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option>
+                    </el-select>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="content_left_a">
+                <el-steps direction="vertical" class="step" :active="active" finish-status="success" :process-status="process">
+                    <el-step title="付款信息"></el-step>
+                    <el-step title="确认付款"></el-step>
+                    <el-step title="交易完成"></el-step>
+                </el-steps>
+            </div>
+            <div class="content_left_b">
+                <el-steps class="step" :active="active">
+                    <el-step title="付款信息"></el-step>
+                    <el-step title="确认付款"></el-step>
+                    <el-step title="交易完成"></el-step>
+                </el-steps>
+            </div>
+            <div class="content_right">
+                <div v-show="active === 0">
+                    <div class="right_title">
+                        <div class="title_line"></div>
+                        <div class="title_text">付款信息</div>
+                    </div>
+                    <div class="white_box">
+                        <div class="white_row">
+                           <span class="row_title">交易账户</span>
+                           <div>
+                                <el-input v-model="num" type="number" maxlength="12" placeholder="请输入交易账户" @blur="nums()"></el-input>
+                                <div class="red_text"><span v-show="numa">请正确填写</span></div>
+                           </div>
+                        </div>
+                        <div class="white_row">
+                            <span class="row_title">账户姓名</span>
+                            <div>
+                                <div class="usdt">
+                                    <el-input v-model="name" maxlength="20" placeholder="请输入账户姓名" @blur="names()"></el-input>
+                                    <span class="red_text red-long">请正确填写交易账户姓名，否则无法到账</span>
+                                </div>
+                                <div class="red_text"><span v-show="namea">请正确填写</span></div>
+                            </div>
+                         </div>
+                         <div class="white_row">
+                            <span class="row_title">购买数量</span>
+                            <div>
+                                <div class="usdt">
+                                    <el-input v-model="buy" type="number" maxlength="20" placeholder="请输入购买数量" @blur="buys()"></el-input>
+                                    <span class="red_text">*USDT美金</span>
+                                </div>
+                                <div class="red_text"><span v-show="buya">请正确填写</span></div>
+                            </div>
+                         </div>
+                         <div class="white_row">
+                            <span class="row_title">汇率</span>
+                            <span class="red_text">6.4767</span>
+                            <span class="red_text">*实时变动</span>
+                         </div>
+                    </div>
+                    <div class="white_box">
+                        <div class="white_row">
+                            <span class="row_title">支付方式</span>
+                            <div class="choose">
+                                <el-radio v-model="radio" label="银行转账" border><img src="./img/bank-z.png" alt=""></el-radio>
+                                <el-radio v-model="radio" label="USDT转账" border><img src="./img/zhifubao.png" alt=""></el-radio>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="commit" @click="next">
+                        提交
+                    </div>
+                </div>
+                <div v-show="active === 1">
+                    <div class="right_title">
+                        <div class="title_line"></div>
+                        <div class="title_text">确认汇款</div>
+                    </div>
+                    <div class="white_box">
+                        <div class="white_row">
+                            <span class="row_title long-title">交易账户</span>
+                            <span>{{ num }}</span>
+                        </div>
+                        <div class="white_row">
+                            <span class="row_title long-title">账户姓名</span>
+                            <span>{{ name }}</span>
+                        </div>
+                        <div class="white_row">
+                            <span class="row_title long-title">购买数量</span>
+                            <span>{{ buy }}&nbsp;&nbsp;<span class="red_text">USDT美金</span></span>
+                        </div>
+                        <div class="white_row">
+                            <span class="row_title long-title">支付方式</span></span>
+                            <span>{{ radio }}</span>
+                        </div>
+                    </div>
+                    <div class="row-button">
+                        <div class="commit row-commit" @click="finishes">
+                            已完成汇款
+                        </div>
+                        <div class="commit row-commit row-commit-b" @click="remove">
+                            取消订单
+                        </div>
+                    </div>
+                </div>
+                <div v-show="active === 2">
+                    <div v-show="over === 0">
+                        <div class="ok">
+                            <img src="./img/ok.png" alt="">
+                            <div class="ok-text">订单提交成功</div>
+                        </div>
+                    </div>
+                    <div v-show="over === 1">
+                        <div class="right_title">
+                            <div class="title_line"></div>
+                            <div class="title_text">订单信息</div>
+                        </div>
+                        <div class="white_box">
+                            <div class="gg-title">订单已取消</div>
+                            <div class="gg-text">如您已成功汇款，请准备付款凭证及银行账户信息并返回原网站与原平台客服反馈，交易员将尽快完成订单。若汇款含有附言，或付款人姓名与原网站留存姓名不同时将被退款处理，请耐心等候。</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right_title right-mt">
+                    <div class="title_line"></div>
+                    <div class="title_text">安全交易须知</div>
+                </div>
+                <ul>
+                    <li>每次支付随机匹配的卖家不同，同一个卖家所使用的银行卡也可能不同，请按照每次所显示的付款信息打款，请勿直接打款到之前充值过的卡号，否则可能无法到账，造成的损失平台概不负责。</li>
+                    <li>转账时请勿填写任何备注！包括数字货币、USDT、充值、美金、外汇等字样。否则可能导致卖家账户和您的账户被冻结，造成的损失平台概不负责。</li>
+                    <li>重要提示：作为独立公正的数字货币撮合平台，AKP平台坚决反对任何机构和个人利用AKP产品从事不符合法律的商业行为。如果您对交易有疑问，或有任何的投诉或建议，请email联系AKP官方客服：AKPio@gmail.com。我们确保100%回复。</li>
+                </ul>
+                <div class="right_title">
+                    <div class="title_line"></div>
+                    <div class="title_text">交易提醒</div>
+                </div>
+                <ul>
+                    <li>关于AKP：AKP是全球首个场景化数字货币兑换平台，撮合数字货币持有者、数字货币需求者进行快速的数字货币兑换，并用担保交易确保兑换的100%安全。</li>
+                    <li>交易时间段：9：00-21：00，其他时间的交易可能会延迟到下个交易时间段处理。</li>
+                    <li>到账速度：根据银行结算制度，在工作日的17：00以前，到账速度为实时到账；工作日17：00以后和周末节假日时间，到账速度可能略有延迟。到账时间取决于银行规定，请咨询您的银行。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    active: 0,
+                    value: '中文',
+                    num: '',
+                    numa: 0,
+                    name: '',
+                    namea: 0,
+                    buy: '',
+                    buya: 0,
+                    radio: '银行转账',
+                    over: 1,
+                    process: 'process',
+                    options: [
+                        {
+                            value: '中文',
+                            label: '中文'
+                        },{
+                            value: '英文',
+                            label: 'English'
+                        }
+                    ],
+
+                }
+            },
+            methods: {
+                nums(){
+                    if(this.num == ""){
+                       this.numa = 1; 
+                    }else{
+                        this.numa = 0;
+                    }
+                },
+                names(){
+                    if(this.name == ""){
+                       this.namea = 1; 
+                    }else{
+                        this.namea = 0;
+                    }
+                },
+                buys(){
+                    if(this.buy == ""){
+                       this.buya = 1; 
+                    }else{
+                        this.buya = 0;
+                    }
+                },
+                next(){
+                    if(this.num === ""){
+                        this.numa = 1
+                    };
+                    if(this.name === ""){
+                        this.namea = 1
+                    };
+                    if(this.buy === ""){
+                        this.buya = 1
+                    };
+                    if(this.num === "" || this.name === "" || this.buy === ""){
+                        console.log("填写错误")
+                    }else{
+                        this.active = 1;
+                    }
+                },
+                finishes(){
+                    this.active = 2;
+                    this.over = 0;
+                    console.log(this.active);
+                },
+                remove(){
+                    this.active = 2;
+                    this.process = 'error';
+                    this.over = 1;
+                }
+            },
+            watch: {
+
+            }
+        })
+    </script>
+</body>
+
+</html>

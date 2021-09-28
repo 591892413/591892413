@@ -1,0 +1,267 @@
+body{
+    margin: 0;
+    overflow-x: hidden;
+}
+#app{
+    padding-top: 76px;
+}
+.head{
+    background-image: linear-gradient(135deg,#638dad,#633c93);
+    position: fixed;
+    top: 0;
+    padding: 18px 0;
+    width: 100%;
+    z-index: 10;
+}
+.logo{
+    height: 40px
+}
+.minbox{
+    max-width: 1150px;
+    margin: 0 auto;
+    justify-content: space-between;
+    display: flex;
+}
+.step{
+    height: 280px;
+    width: 150px;
+}
+.lan{
+    text-align: right;
+    width: 92px;
+}
+/*头部结束*/
+.content{
+    background-color: #f8f8f8;
+    display: flex;
+}
+.content_left_a{
+    padding-top: 120px;
+    overflow: hidden;
+    min-width: 150px;
+    width: 33.3%;
+    display: flex;
+    justify-content: flex-end;
+    background-color: #fff
+}
+.content_left_b{
+    padding-top: 20px;
+    width: 100%;
+    display: none;
+    background-color: #fff;
+}
+.el-step__icon.is-text{
+    background: #633991;
+    color:#fff;
+}
+.el-step__head.is-process{
+    border-color: #633991;
+}
+.el-step__head.is-wait .el-step__icon.is-text{
+    background: #c0c4cc
+}
+.el-step__head.is-wait{
+    border-color: #c0c4cc;
+}
+.el-step__title.is-success{
+    color: #189ed6;
+    font-weight: bold;
+}
+.el-step__head.is-success .el-step__icon{
+    background-color: #189ed6
+}
+.el-step__title.is-process{
+    color:#633991;
+}
+.el-step__head.is-success{
+    border-color:#189ed6;
+}
+.is-error .el-step__icon.is-text{
+    background-color:#f56c6c;
+}
+/*步骤条*/
+.content_right{
+    padding: 55px 24px 24px 24px;
+    width: 77.7%;
+    max-width: 800px;
+    min-height: calc(100vh - 130px);
+}
+.right_title{
+    display: flex;
+    line-height: 27px;
+    margin-top: 24px;
+}
+.right-mt{
+    margin-top: 50px;
+}
+.title_line{
+    width: 3px;
+    height: 22px;
+    margin-right: 16px;
+    margin-top: 3px;
+    background-image: linear-gradient(135deg,#3a127a,#189ed6);
+}
+.title_text{
+    color: #633991;
+    font-weight: 700;
+    font-size: 18px;
+}
+.white_box{
+    margin-top: 24px;
+    padding: 24px;
+    box-shadow: 0 1px 5px rgb(0 0 0 / 20%), 0 2px 2px rgb(0 0 0 / 14%), 0 3px 1px -2px rgb(0 0 0 / 12%);
+    border-radius: 4px;
+    vertical-align: top;
+    background: #fff;
+    font-size: 14px;
+}
+.white_row{
+    display: flex;
+}
+.row_title{
+    width: 80px;
+    color: #757575;
+    height: 30px;
+}
+.white_row input{
+    width: 200px;
+    height: 30px;
+}
+input::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+}
+.usdt{
+    display: flex;
+}
+.red_text{
+    color:#fc388e;
+    height: 30px;
+    width: 100px
+}
+.red-long{
+    width: 260px;
+}
+.usdt .el-input{
+    width: 220px;
+}
+.el-radio__inner{
+    display: none;
+}
+.el-radio.is-bordered{
+    padding: 0;
+}
+.el-radio__label{
+    padding: 0;
+}
+.commit{
+    margin: 20px auto;
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    background-image: linear-gradient(135deg,#3a127a,#189ed6);
+    color: #fff;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+}
+.choose img{
+    margin-top: 2px;
+}
+ul{
+    color: #757575;
+    font-size: 14px;
+}
+li{
+    line-height: 20px;
+    margin-bottom: 10px;
+}
+
+/*步骤2*/
+.row-button{
+    display:flex
+}
+.row-commit{
+    width: 180px
+}
+.row-commit-b{
+    background: #fff;
+    color: #633991;
+    box-shadow: 0 0 5px #ccc;
+}
+/*步骤3*/
+.ok{
+    text-align: center;
+}
+.ok-text{
+    font-size: 26px;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #633991
+}
+.gg-title{
+    color:#fc388e;
+    font-size :18px;
+    font-weight: 700;
+}
+.gg-text{
+    margin-top: 16px;
+    font-size: 14px;
+}
+@media screen and (max-width: 1050px) {
+    body{
+        background-color: #f8f8f8;
+    }
+    .minbox{
+        justify-content:space-around;
+    }
+    .content{
+        display: block;
+    }
+    .content_left_a{
+        display: none;
+    }
+    .content_left_b{
+        display: block;
+    }    
+    .el-step__head{
+        margin-left: 20px;
+    }
+    .content_right{
+        width: calc(100vw - 50px);
+    }
+    .step{
+        width: 90%;
+        height: 100px;
+        margin: 0 auto;
+    }
+    .row_title{
+        width: 40px;
+    }
+    .usdt{
+        display: block;
+        width: 200px;
+    }
+    .choose{
+        text-align: center;
+    }
+    .el-radio{
+        margin: 0
+    }
+    .el-radio.is-bordered+.el-radio.is-bordered{
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    .long-title{
+        width: 70px
+    }
+}
+@media screen and (max-width: 420px){
+    .row-button{
+        display: block;
+    }
+}
+@media screen and (max-width: 360px){
+    .white_box{
+        padding: 12px
+    }
+}
