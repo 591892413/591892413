@@ -31,14 +31,14 @@
         <div class="content">
             <div class="content_left_a">
                 <el-steps direction="vertical" class="step" :active="active" finish-status="success" :process-status="process">
-                    <el-step title="付款信息"></el-step>
+                    <el-step title="订单信息"></el-step>
                     <el-step title="确认付款"></el-step>
                     <el-step title="交易完成"></el-step>
                 </el-steps>
             </div>
             <div class="content_left_b">
                 <el-steps class="step" :active="active">
-                    <el-step title="付款信息"></el-step>
+                    <el-step title="订单信息"></el-step>
                     <el-step title="确认付款"></el-step>
                     <el-step title="交易完成"></el-step>
                 </el-steps>
@@ -47,7 +47,7 @@
                 <div v-show="active === 0">
                     <div class="right_title">
                         <div class="title_line"></div>
-                        <div class="title_text">付款信息</div>
+                        <div class="title_text">订单信息</div>
                     </div>
                     <div class="white_box">
                         <div class="white_row">
@@ -79,7 +79,7 @@
                          </div>
                          <div class="white_row">
                             <span class="row_title">汇率</span>
-                            <span class="red_text">6.4767</span>
+                            <span class="red_text">{{ rate }}</span>
                             <span class="red_text">*实时变动</span>
                          </div>
                     </div>
@@ -88,7 +88,7 @@
                             <span class="row_title">支付方式</span>
                             <div class="choose">
                                 <el-radio v-model="radio" label="银行转账" border><img src="./img/bank-z.png" alt=""></el-radio>
-                                <el-radio v-model="radio" label="USDT转账" border><img src="./img/zhifubao.png" alt=""></el-radio>
+                                <el-radio v-model="radio" label="USDT" border><img src="./img/zhifubao.png" alt=""></el-radio>
                             </div>
                         </div>
                     </div>
@@ -101,6 +101,7 @@
                         <div class="title_line"></div>
                         <div class="title_text">确认汇款</div>
                     </div>
+                    <div class="red-color mt-24">您购买的USDT已在AKP平台系统完成托管锁定，卖家无法单独提走，请放心支付</div>
                     <div class="white_box">
                         <div class="white_row">
                             <span class="row_title long-title">交易账户</span>
@@ -110,14 +111,78 @@
                             <span class="row_title long-title">账户姓名</span>
                             <span>{{ name }}</span>
                         </div>
+                        <div class="white_row" v-show="radio === '银行转账'">
+                            <span class="row_title long-title">汇率</span>
+                            <span>{{ rate }}</span>
+                        </div>
                         <div class="white_row">
                             <span class="row_title long-title">购买数量</span>
-                            <span>{{ buy }}&nbsp;&nbsp;<span class="red_text">USDT美金</span></span>
+                            <span>{{ buy }}&nbsp;&nbsp;个</span>
+                        </div>
+                        <div class="white_row" v-show="radio === 'USDT'">
+                            <span class="row_title long-title">付款USDT</span>
+                            <span>{{ payUSDT }}&nbsp;&nbsp;个</span>
+                        </div>
+                        <div class="white_row" v-show="radio === 'USDT'">
+                            <span class="row_title long-title">矿工费</span>
+                            <span>{{ routine }}</span>
+                        </div>
+                        <div class="white_row" v-show="radio === '银行转账'">
+                            <span class="row_title long-title">支付金额</span></span>
+                            <span>{{ pay }}&nbsp;&nbsp;元</span>
+                        </div>
+                    </div>
+                    <div class="white_box" v-show="radio === '银行转账'">
+                        <div class="red_text">请完成转账</div>
+                        <div class="white_row">
+                            <span class="row_title long-title">卖家信息</span>
+                            <span>{{ sellName }}</span>
                         </div>
                         <div class="white_row">
-                            <span class="row_title long-title">支付方式</span></span>
-                            <span>{{ radio }}</span>
+                            <span class="row_title long-title">银行信息</span>
+                            <span>{{ sellCard }}</span>
                         </div>
+                        <div class="white_row">
+                            <span class="row_title long-title">支行信息</span>
+                            <span>{{ subbranch }}</span>
+                        </div>
+                        <div class="white_row">
+                            <span class="row_title long-title">银行卡号</span>
+                            <span>{{ cardNum }}</span>
+                        </div>
+                        <div class="red-color">请勿备注任何内容 ，否则会导致订单失效</div>
+                    </div>
+                    <div class="white_box" v-show="radio === 'USDT'">
+                        <div class="red_text">请完成转账</div>
+                        <div class="white_row">
+                            <span class="row_title long-title">链名称</span>
+                            <span>{{ lineName }}</span>
+                        </div>
+                        <div class="white_row">
+                            <span class="row_title long-title">钱包地址</span>
+                            <span>{{ add }}</span>
+                        </div>
+                        <div class="white_row">
+                            <span class="row_title long-title">USDT二维码</span>
+                            <img :src="qrCode" alt="">
+                        </div>
+                        <div class="red-color">请转账 {{ payUSDT }} USDT，请勿备注任何内容 ，否则会导致订单失效</div>
+                    </div>
+                    <div class="white_box">
+                        <div class="red-color mb-24">请上传支付凭证图片</div>
+                        <el-upload action="#" list-type="picture-card" :auto-upload="false" :file-list="fileList">
+                            <i slot="default" class="el-icon-plus"></i>
+                            <div slot="file" slot-scope="{file}">
+                                <img class="el-upload-list__item-thumbnail" :src="file.url" alt="">
+                                <span class="el-upload-list__item-actions">
+                                    <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)"><i class="el-icon-zoom-in"></i></span>
+                                    <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file,fileList)"><i class="el-icon-delete"></i></span>
+                                </span>
+                            </div>
+                        </el-upload>
+                        <el-dialog :visible.sync="dialogVisible">
+                            <img width="100%" :src="dialogImageUrl" alt="">
+                        </el-dialog>
                     </div>
                     <div class="row-button">
                         <div class="commit row-commit" @click="finishes">
@@ -180,10 +245,22 @@
                     numa: 0,
                     name: '',
                     namea: 0,
+                    rate: 6.4817,
+                    pay: '',
                     buy: '',
                     buya: 0,
+                    sellName: '唐唐',
+                    sellCard: '浦发银行',
+                    subbranch: '深圳湾支行',
+                    cardNum: '666666666666666666666',
+                    lineName: 'tttttttt',
+                    add: 'jkdlsfghkasdfhgjks',
+                    qrCode: './img/payUSDT.png',
                     radio: '银行转账',
+                    payUSDT: '',
+                    routine: 1,
                     over: 1,
+                    fileList: [],
                     process: 'process',
                     options: [
                         {
@@ -194,7 +271,9 @@
                             label: 'English'
                         }
                     ],
-
+                    dialogImageUrl: '',
+                    dialogVisible: false,
+                    disabled: false,
                 }
             },
             methods: {
@@ -219,6 +298,13 @@
                         this.buya = 0;
                     }
                 },
+                handleRemove(file,fileList) {
+                    console.log(this.fileList)
+                },
+                handlePictureCardPreview(file) {
+                    this.dialogImageUrl = file.url;
+                    this.dialogVisible = true;
+                },
                 next(){
                     if(this.num === ""){
                         this.numa = 1
@@ -232,6 +318,8 @@
                     if(this.num === "" || this.name === "" || this.buy === ""){
                         console.log("填写错误")
                     }else{
+                        this.pay = this.rate * this.buy;
+                        this.payUSDT = Number(this.buy) + Number(this.routine);
                         this.active = 1;
                     }
                 },

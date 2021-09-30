@@ -119,7 +119,7 @@ body{
     display: flex;
 }
 .row_title{
-    width: 80px;
+    width: 90px;
     color: #757575;
     height: 30px;
 }
@@ -177,6 +177,12 @@ li{
 }
 
 /*步骤2*/
+.mt-24{
+    margin-top: 24px;
+}
+.red-color{
+    color: #fc388e;
+}
 .row-button{
     display:flex
 }
@@ -187,6 +193,9 @@ li{
     background: #fff;
     color: #633991;
     box-shadow: 0 0 5px #ccc;
+}
+.mb-24{
+    margin-bottom: 12px;
 }
 /*步骤3*/
 .ok{
